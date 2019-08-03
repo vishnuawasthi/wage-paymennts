@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mappers.UserDetailsMapper">
+
+	<resultMap id="billDetailsMap" type="com.app.dto.BillDetails">
+		<id column="ID" property="id" />
+		<result column="DESC" property="description" />
+		<result column="NOTE" property="note" />
+		<result column="AMOUNT" property="amount" />
+	</resultMap>
+
+	<select id="findTotalBillDetails" fetchSize="10" resultMap="billDetailsMap">
+
+		SELECT * FROM BILL_DETAILS
+
+	</select>
+	
+	
+	
+	<insert id="saveBillDetails" parameterType="com.app.dto.BillDetails"  >
+	<!-- insert into bill_details (ID, DESC, NOTE, AMOUNT) VALUES (${id}, ${description}, ${note}, ${amount}) -->
+	insert into bill_details  VALUES ('${id}', '${description}', '${note}', '${amount}')
+	</insert>
+</mapper>

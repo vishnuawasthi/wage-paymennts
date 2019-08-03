@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace="com.app.mappers.CardOrderMapper">
+
+	<insert id="insertCardOrder" useGeneratedKeys="true"  parameterType="com.app.dto.CardOrderFileDetail">
+
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT nextVal('SEQ_card_detail')
+		</selectKey>
+
+		INSERT INTO card_detail(
+		 "ID",
+		"CARD_NUMBER",
+		"PROXY_ID",
+		"VALID_FROM",
+		"VALID_TO",
+		"INITIAL_NAME",
+		"FIRST_NAME",
+		"MIDDLE_NAME",
+		"LAST_NAME",
+		"EMPLOYEE_ID",
+		"client_id",
+		"STATUS")
+		VALUES (
+		<!-- #{id},  -->
+		<!-- #{order.cardNumber},
+		#{order.proxyNumber},
+		TO_DATE(#{order.valididyFrom}, 'YYYY/MM/DD'),
+		TO_DATE(#{order.validityTo},'YYYY/MM/DD'),
+		#{order.initialName},
+		#{order.firstname},
+		#{order.middleName},
+		#{order.lastname},
+		#{order.employeeId},
+		#{order.clientId},
+		#{order.status}) -->
+		
+		 #{id},
+		#{cardNumber},
+		#{proxyNumber},
+		TO_DATE(#{valididyFrom}, 'YYYY/MM/DD'),
+		TO_DATE(#{validityTo},'YYYY/MM/DD'),
+		#{initialName},
+		#{firstname},
+		#{middleName},
+		#{lastname},
+		#{employeeId},
+		#{clientId},
+		#{status})
+	</insert>
+
+	<!-- <insert id="insertBatchOrders" parameterType="java.util.List"> INSERT 
+		ALL <foreach collection="ordersList" item="order" index="index"> INTO EMPLOYEE 
+		(id,name) values (#{element.id},#{element.name}) </foreach> SELECT * FROM 
+		dual </insert> -->
+
+</mapper>
