@@ -27,12 +27,16 @@ public class OrderRouteBuilder extends RouteBuilder {
 					exchange.getIn().setHeader("tempFileName", dateString);
 				})
 				//&fileName= ${header.tempFileName+_Order_File.csv}
-				.from("file://C:/opt/wagepayment/input?noop=false&preMove=.in-progress&move=.processed&moveFailed=.failed")
+				.from("file://D:/opt/wagepayment/input?noop=true")
 				.to("bean:orderService?method=fileToEntity").split().simple("${header.orders}")
 				.process(exchange->{
 					System.out.println("order  {} "+exchange.getIn().getBody());
 				})
 				.to("direct:saveToDatabase")
+				
+				//fileName=VISA-${date:now:yyyyMMdd}
+				//&preMove=.in-progress&move=.processed&moveFailed=.failed
+				//.to("file://D:/opt/wagepayment/processed?fileName=VISA-${date:now:yyyyMMdd}.csv")
 		.end();
 
 		from("direct:saveToDatabase")
@@ -42,6 +46,10 @@ public class OrderRouteBuilder extends RouteBuilder {
 		.to("bean:orderService?method=prepareInsertOrderParam")
 		//&inputHeader=Params
 		.to("myBatisComponent:insertCardOrder?statementType=Insert")
+		
+		.process(exchange->{
+				System.out.println(	exchange.getIn().getHeader("savedData"));
+		})
 		.end();
 
 	}
