@@ -88,10 +88,10 @@ public class OrderServiceImpl implements OrderService {
 		cardOrderFileDetail.setValidityTo(fieldData[3]);
 		cardOrderFileDetail.setInitialName(fieldData[4]);
 		cardOrderFileDetail.setFirstname(fieldData[5]);
-		// cardOrderFileDetail.setMiddleName(fieldData[6]);
+		cardOrderFileDetail.setMiddleName(fieldData[6]);
 		cardOrderFileDetail.setLastname(fieldData[7]);
-		// cardOrderFileDetail.setEmployeeId(Long.valueOf(fieldData[8]));
-		cardOrderFileDetail.setEmployeeId(Long.valueOf(fieldData[9])); // Should
+		cardOrderFileDetail.setEmployeeId(Long.valueOf(fieldData[8]));
+		//cardOrderFileDetail.setEmployeeId(Long.valueOf(fieldData[9])); // Should
 																		// be 8
 		cardOrderFileDetail.setClientId(Long.valueOf(fieldData[9]));
 		cardOrderFileDetail.setStatus(fieldData[10]);
