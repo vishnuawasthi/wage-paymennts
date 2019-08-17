@@ -12,30 +12,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-/*@ComponentScan(basePackages={
-"com.app.config",
-"com.app.routes",
-"com.app.controller",
-"com.app.dao",
-"com.app.service",
-"com.app.utils"
-
-
-})*/
-//@EnableWebMvc
 @Configuration
 public class ApplicationConfig {
-
-	@Bean
-	public ViewResolver viewResolver() {
-		InternalResourceViewResolver resourceView = new InternalResourceViewResolver();
-		resourceView.setPrefix("/WEB-INF/jsp/");
-		resourceView.setSuffix(".jsp");
-		return resourceView;
-	}
+	/*
+	 * @Bean public ViewResolver viewResolver() { InternalResourceViewResolver
+	 * resourceView = new InternalResourceViewResolver();
+	 * resourceView.setPrefix("/WEB-INF/jsp/"); resourceView.setSuffix(".jsp");
+	 * return resourceView; }
+	 */
 
 	/*
 	 * @Bean public DataSource dataSource(){ try { InitialContext cxt = new
@@ -56,7 +41,8 @@ public class ApplicationConfig {
 
 	@Bean
 	@DependsOn("driverManagerDataSource")
-	public SqlSessionFactory sqlSessionFactory(@Qualifier("driverManagerDataSource") DriverManagerDataSource driverManagerDataSource) throws Exception {
+	public SqlSessionFactory sqlSessionFactory(
+			@Qualifier("driverManagerDataSource") DriverManagerDataSource driverManagerDataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(driverManagerDataSource);
 		return sqlSessionFactoryBean.getObject();
@@ -64,14 +50,17 @@ public class ApplicationConfig {
 
 	@Bean
 	@DependsOn("driverManagerDataSource")
-	public DataSourceTransactionManager dataSourceTransactionManager(@Qualifier("driverManagerDataSource") DriverManagerDataSource driverManagerDataSource) {
-		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(driverManagerDataSource);
+	public DataSourceTransactionManager dataSourceTransactionManager(
+			@Qualifier("driverManagerDataSource") DriverManagerDataSource driverManagerDataSource) {
+		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(
+				driverManagerDataSource);
 		return dataSourceTransactionManager;
 	}
 
 	@Bean(name = "myBatisComponent")
 	@DependsOn("sqlSessionFactory")
-	public MyBatisComponent batisComponent(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory)throws Exception {
+	public MyBatisComponent batisComponent(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory)
+			throws Exception {
 		MyBatisComponent batisComponent = new MyBatisComponent();
 		batisComponent.setSqlSessionFactory(sqlSessionFactory);
 		return batisComponent;
