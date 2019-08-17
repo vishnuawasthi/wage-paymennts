@@ -39,8 +39,12 @@
 		 #{id},
 		#{cardNumber},
 		#{proxyNumber},
-		TO_DATE(#{valididyFrom}, 'YYYY/MM/DD'),
-		TO_DATE(#{validityTo},'YYYY/MM/DD'),
+		
+	<!-- 	date('dd-mm-yyyy',#{valididyFrom}),
+		date('dd-mm-yyyy',#{validityTo}), -->
+		
+		 to_date(#{valididyFrom}, 'dd-mm-yyyy'), <!--Old :YYYY/MM/DD        new:   dd-mm-yyyy  -->
+		 to_date(#{validityTo},'dd-mm-yyyy'),   <!-- Old :YYYY/MM/DD        new:  dd-mm-yyyy  -->
 		#{initialName},
 		#{firstname},
 		#{middleName},
