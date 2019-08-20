@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.app.dto.CardOrderFileDetail;
+import com.app.utils.CommonUtility;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
@@ -51,6 +52,17 @@ public class OrderServiceImpl implements OrderService {
 		if (StringUtils.isEmpty(cardOrderFileDetail.getCardNumber())) {
 			builder.append("Card number is missing");
 			builder.append(",");
+		}else if(!CommonUtility.regExpCheck(cardOrderFileDetail.getCardNumber(), "^[a-zA-Z0-9]*$")) {
+			builder.append("Invalid format for card number. It should only accept 0-9,a-z,A-Z");
+			builder.append(",");
+		}
+		
+		if (StringUtils.isEmpty(cardOrderFileDetail.getProxyNumber())) {
+			builder.append("ProxyId is missing");
+			builder.append(",");
+		}else if(!CommonUtility.regExpCheck(cardOrderFileDetail.getProxyNumber(), "^[a-zA-Z0-9]*$")) {
+			builder.append("Invalid format for ProxyId. It should only accept 0-9,a-z,A-Z");
+			builder.append(",");
 		}
 
 		if (StringUtils.isEmpty(cardOrderFileDetail.getClientId())) {
@@ -60,6 +72,11 @@ public class OrderServiceImpl implements OrderService {
 
 		if (StringUtils.isEmpty(cardOrderFileDetail.getFirstname())) {
 			builder.append("First name is missing");
+			builder.append(",");
+		}
+		
+		if (StringUtils.isEmpty(cardOrderFileDetail.getLastname())) {
+			builder.append("Last name is missing");
 			builder.append(",");
 		}
 
