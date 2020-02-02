@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+
+ 
+<mapper namespace="com.app.mappers.SelectExampleMapper">
+
+<sql id="employeeColumns">
+	
+	id,
+	name
+
+
+</sql>
+
+
+
+	<!-- Select query example start -->
+
+	<!--1.   Example with HashMap resultType -->
+	
+	<select id="selectExampleWithMap" parameterType="long" resultType="hashmap">
+		select * from employee where id = #{id}
+	</select>
+	
+	
+	<!--  2. select example with map as list, In case of multiple records  -->
+	
+	<select id="selectExampleWithMapMultipleRow"  resultType="hashmap">
+		select * from employee
+	</select>
+	
+	<!--  3. Select example with auto column mapping  -->
+	
+	<select id="selectWithAutoColumnMapping"    statementType="PREPARED"  resultType="com.app.dto.Employee">
+		select id , name , adhar_no as ADHARNO , dept_id as deptId, created_dt as createdDate, manager_id as managerId, course_id as courseId from employee;
+	</select>
+	
+	
+	
+	
+	<!-- 4 Select with <sql> tag example  -->
+	
+	
+	<select id="selectWithSqlTagExample"  resultType="hashmap">
+	select 
+	<include refid="employeeColumns"  />
+	from employee emp;
+	
+	</select>
+
+	<!-- Select query example end -->
+
+	<!-- SAVE Example start -->
+	
+	
+	
+	
+	
+	
+	<insert id="saveEmployeeExample1"   statementType="PREPARED"  parameterType="com.app.dto.Employee" >
+	
+	<selectKey keyProperty="id"   order="BEFORE" resultType="long"  statementType="PREPARED" >
+		SELECT nextval('SEQ_COURSE_ID') as id
+	</selectKey>
+	
+		INSERT INTO EMPLOYEE(ID, NAME, ADHAR_NO, CREATED_DT) values (#{id}, #{name},#{adharNo},#{createdDate}); 
+	</insert>
+	
+	
+	<!--  Multi row insert example  -->
+	
+	<select id="selectEmployeeIdFieldValue"   resultType="long">
+		SELECT nextval('SEQ_COURSE_ID') as id
+	</select>
+	
+	<insert id="insertMultipleRowExample"  parameterType="java.util.ArrayList"  statementType="PREPARED" >
+	
+		INSERT INTO EMPLOYEE(ID, NAME, ADHAR_NO, CREATED_DT) values
+	
+		<foreach  item="emp" collection="list" separator=",">
+		 (#{emp.id}, #{emp.name},#{emp.adharNo},#{emp.createdDate})
+		</foreach>
+		
+	</insert>
+	<!-- SAVE Example end --> 
+	
+	
+	<select id="selectDepartmentWithEmployeesEx1" resultMap="selectDepartmentWithEmployeesEx1Map">
+		select d.id AS ID , d.name AS NAME, d.code AS CODE ,d.dept_type AS TYPE,  e.id as emp_id , e.name as emp_name  from department d left join employee e on e.dept_id = d.id;
+	</select>
+	
+	<resultMap type="com.app.dto.DepartmentResultDTO" id="selectDepartmentWithEmployeesEx1Map">
+		<id     property="deptId"     column="ID" />
+		<result property="deptName"   column="NAME" />
+		<result property="deptType"   column="TYPE" />
+		<!-- <result property="code"       column="CODE" /> -->
+		
+		<!-- <collection property="employeeIdList"  javaType="java.util.ArrayList" ofType="long">
+			<result column="emp_id" />
+		</collection> -->
+		
+	<!-- 	<collection property="employeesList"  javaType="java.util.ArrayList"   ofType="com.app.dto.Employee"  >
+			<id property="id"   column="emp_id" />
+			<result property="name"   column="emp_name" />
+		</collection> -->
+		
+		
+		<discriminator javaType="string"   column="CODE" >
+		
+		<case value="SALES">
+			<collection property="salesEmployees"  javaType="java.util.ArrayList"   ofType="com.app.dto.Employee"  >
+				<id property="id"   column="emp_id" />
+				<result property="name"   column="emp_name" />
+			</collection>
+		</case>
+		
+		<case value="MRKT">
+			<collection property="mrktEmployees"  javaType="java.util.ArrayList"   ofType="com.app.dto.Employee"  >
+				<id property="id"   column="emp_id" />
+				<result property="name"   column="emp_name" />
+			</collection>
+		</case>
+		
+		</discriminator>
+		
+	</resultMap>
+
+	
+	<select id="selectEmployeeWithDiscriminatorExample"  resultMap="selectEmployeeWithDiscriminatorExampleMap">
+		select * from employee
+   </select>
+   
+   <resultMap type="com.app.dto.DiscriminatorExampleDTO" id="selectEmployeeWithDiscriminatorExampleMap">
+   
+   <discriminator javaType="long"  column="dept_id">  
+   
+   <case value="100" resultType="com.app.dto.DiscriminatorExampleDTO">
+   
+   <collection property="deptMrktEmployees">
+	  		 <result  column="ID" />
+	</collection>
+	
+   </case>
+   
+    <case value="101" resultMap="deptMrktEmployeesMap"></case>
+   
+   </discriminator>
+   
+   </resultMap>
+   
+   <resultMap type="com.app.dto.DiscriminatorExampleDTO" id="deptSalesEmployeesMap">
+	   <collection property="deptSalesEmployees">
+	  		 <result  column="ID" />
+	   </collection>
+   </resultMap>
+   
+   <resultMap type="com.app.dto.DiscriminatorExampleDTO" id="deptMrktEmployeesMap">
+	   <collection property="deptMrktEmployees">
+	  		 <result  column="ID" />
+	   </collection>
+   </resultMap>
+   
+   
+</mapper>

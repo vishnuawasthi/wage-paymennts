@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+
+<!-- Ref 1. http://dongchuan.github.io/mybatis/2016/04/17/MyBatis-Advanced.html 
+	2. https://mybatis.org/mybatis-3/sqlmap-xml.html -->
+
+
+<mapper namespace="com.app.mappers.EmployeeMapper">
+
+
+
+
+	<!-- <select id="getAllEmployee" fetchSize="2" resultMap="employeeDetailsMap"> 
+		select ID, NAME , adhar_no from Employee </select> <resultMap type="com.app.dto.Employee" 
+		id="employeeDetailsMap"> <id property="id" column="ID" /> <result property="name" 
+		column="NAME" /> <result property="aadharNo" column="adhar_no" /> </resultMap> -->
+
+
+
+
+	<insert id="saveCourseDetails"
+		parameterType="com.app.dto.CourseDto" useGeneratedKeys="true"
+		statementType="PREPARED">
+
+		INSERT INTO courses(NAME,duration) values( #{name}, #{duration}) ;
+
+		<selectKey keyProperty="id" resultType="long" order="AFTER">
+			SELECT
+			nextval('SEQ_COURSE_ID') as id
+		</selectKey>
+
+	</insert>
+
+
+	<select id="fetchDepartmentsWithEmployeesId"
+		resultMap="departmentMap">
+		SELECT d.id
+		AS deptId,
+		d.NAME AS deptName,
+		e.id AS EMP_ID
+		FROM
+		department d LEFT JOIN employee e
+		ON e.dept_id = d.id
+	</select>
+
+	<resultMap type="com.app.dto.DepartmentResultDTO"
+		id="departmentMap">
+		<id property="deptId" column="deptId" />
+		<result property="deptName" column="deptName" />
+
+		<collection property="employeeIdList" ofType="long"
+			javaType="java.util.ArrayList">
+			<result column="EMP_ID" />
+		</collection>
+	</resultMap>
+
+
+	<select id="fetchEmployeesDetailsList" statementType="STATEMENT"
+		timeout="10" fetchSize="2" resultMap="empBasicDetailsMap">
+		SELECT e.id AS ID,
+		e.NAME AS NAME,
+		e.adhar_no AS adhar_no,
+		e.dept_id AS dept_id,
+		d.dept_type AS dept_type
+		FROM employee e
+		INNER JOIN department d
+		ON d.id = e.dept_id
+	</select>
+
+	<resultMap id="empBasicDetailsMap"
+		type="com.app.dto.Employee">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="adharNo" column="ADHAR_NO" />
+		<result property="deptType" column="DEPT_TYPE" />
+		<result property="deptId" column="DEPT_ID" />
+	</resultMap>
+
+	<select id="fetchCourseDetails"
+		resultMap="employeeeCourseExampleMap" statementType="STATEMENT"
+		timeout="10" fetchSize="2">
+		SELECT c.id AS course_id,
+		c.duration AS
+		course_duration,
+		c.NAME AS course_name,
+		c.duration AS course_duration,
+		e.id AS employee_id,
+		e.NAME AS employee_name
+		FROM courses c
+		LEFT JOIN
+		employee e
+		ON e.course_id = c.id
+	</select>
+
+	<!-- 1. ##################### Discriminator Example ############################# -->
+
+	<!-- <select id="selectCourseWithDiscriminatorExample" resultMap="courseWithDiscriminatorExampleMap" 
+		> SELECT c.id AS course_id, c.duration AS course_duration, c.NAME AS course_name, 
+		c.duration AS course_duration, e.id AS employee_id, e.NAME AS employee_name 
+		FROM courses c LEFT JOIN employee e ON e.course_id = c.id </select> -->
+
+	<!-- <resultMap type="com.app.dto.CourseData" id="courseWithDiscriminatorExampleMap"> 
+		<id property="courseId" column="course_id" /> <result property="courseName" 
+		column="course_name" /> <discriminator javaType="int" column="course_duration"> 
+		<case value="1" resultMap="oneMonthEmployeeMap" > </case> <case value="4" 
+		resultMap="moreThanOneMonthEmployeeMap" > </case> </discriminator> </resultMap> 
+		<resultMap type="com.app.dto.CourseData" id="oneMonthEmployeeMap"> <collection 
+		javaType="java.util.ArrayList" ofType="com.app.dto.Employee" property="oneMonthEmployee"> 
+		<result property="id" column="employee_id" /> <result property="name" column="employee_name" 
+		/> </collection> </resultMap> <resultMap type="com.app.dto.CourseData" id="moreThanOneMonthEmployeeMap"> 
+		<collection javaType="java.util.ArrayList" ofType="com.app.dto.Employee" 
+		property="moreThanOneMonthEmployee"> <result property="id" column="employee_id" 
+		/> <result property="name" column="employee_name" /> </collection> </resultMap> -->
+
+
+	<!-- ##################################### CollectionExaple ############################### -->
+	<resultMap type="com.app.dto.CourseData"
+		id="employeeeCourseExampleMap">
+
+		<id property="courseId" column="course_id" />
+		<result property="courseName" column="course_duration" />
+
+		<collection property="allEmployeeList"
+			javaType="java.util.ArrayList" ofType="com.app.dto.Employee">
+			<result property="id" column="employee_id" />
+			<result property="name" column="employee_name" />
+		</collection>
+
+
+		<!-- <discriminator javaType="int" column="course_duration" > <case value="1"> 
+			<collection javaType="java.util.ArrayList" ofType="com.app.dto.Employee" 
+			property="oneMonthEmployee"> <result property="id" column="employee_id" /> 
+			<result property="name" column="employee_name" /> </collection> </case> <case 
+			value="3"> <collection javaType="java.util.ArrayList" ofType="com.app.dto.Employee" 
+			property="moreThanOneMonthEmployee"> <result property="id" column="employee_id" 
+			/> <result property="name" column="employee_name" /> </collection> </case> 
+			</discriminator> -->
+
+
+	</resultMap>
+
+	<resultMap type="com.app.dto.Employee"
+		id="employeeDetailsMapEx1">
+		<result property="id" column="employee_id" />
+		<result property="name" column="employee_name" />
+	</resultMap>
+
+</mapper>

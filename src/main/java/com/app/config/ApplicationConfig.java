@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -33,7 +35,7 @@ public class ApplicationConfig {
 	public DataSource driverManagerDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/POC_SCHEMA");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/LocalPractiseDB");
 		dataSource.setUsername("POC_ADMIN");
 		dataSource.setPassword("login@123");
 		return dataSource;
@@ -45,6 +47,12 @@ public class ApplicationConfig {
 			@Qualifier("driverManagerDataSource") DriverManagerDataSource driverManagerDataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(driverManagerDataSource);
+		
+		//mapperLocations
+		
+		//Resource[] mapperLocations
+		
+		//Resource Resource = new ClassPathResource("");
 		return sqlSessionFactoryBean.getObject();
 	}
 

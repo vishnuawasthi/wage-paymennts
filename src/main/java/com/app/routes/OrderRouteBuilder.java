@@ -27,8 +27,8 @@ public class OrderRouteBuilder extends RouteBuilder {
 					exchange.getIn().setHeader("tempFileName", dateString);
 				})
 				//&fileName= ${header.tempFileName+_Order_File.csv}
-				.from("file://D:/opt/wagepayment/input?noop=true")
-				.to("bean:orderService?method=fileToEntity").split().simple("${header.orders}")
+				//.from("file://D:/opt/wagepayment/input?noop=true")
+				//.to("bean:orderService?method=fileToEntity").split().simple("${header.orders}")
 				.process(exchange->{
 					System.out.println("order  {} "+exchange.getIn().getBody());
 				})

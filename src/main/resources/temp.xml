@@ -1,0 +1,28 @@
+<!-- <resultMap type="java.util.ArrayList"   id="salesEmployeeMap">
+		<collection resultMap="empBasicDetailsMap" property="salesEmployee" ofType="com.app.dto.Employee" >
+		</collection>
+	</resultMap>
+	
+	<resultMap type="java.util.ArrayList"  id="marketingEmployeeMap">
+		<collection resultMap="empBasicDetailsMap" property="marketingEmployee" ofType="com.app.dto.Employee">
+		</collection>
+	</resultMap> -->
+	
+	
+	<resultMap id="employeeDataMap" type="com.app.dto.EmployeesData" >
+	
+	<result  property="isFetched"    column="IS_FETCHED"/>
+	
+		<discriminator javaType="string" column="dept_type">
+			<case value="SALES">
+				<collection resultMap="empBasicDetailsMap" property="salesEmployee" ofType="com.app.dto.Employee" >
+				</collection>
+			</case>
+			
+			<case value="MRKT">
+				<collection resultMap="empBasicDetailsMap" property="marketingEmployee" ofType="com.app.dto.Employee">
+				</collection>
+			</case>
+			
+		</discriminator>
+	</resultMap>

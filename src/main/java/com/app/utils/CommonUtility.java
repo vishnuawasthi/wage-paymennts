@@ -11,13 +11,43 @@ public class CommonUtility {
 		Matcher m = p.matcher(String.valueOf(value));
 		boolean result = m.matches();
 		return result;
-
 	}
 
+	public static void checkStr(String str, String type, String name) {
+		String report  = str.concat(getType(type)).concat(getName(name));
+		System.out.println("report : "+report);
+	}
+
+	public static String getType(String type) {
+		String str = null;
+		if ("A".equalsIgnoreCase(type)) {
+			str = "A";
+		} else if ("B".equalsIgnoreCase(type)) {
+			str = "B";
+		} else {
+			str = "All";
+		}
+		return str;
+	}
+	
+	
+	public static String getName(String name) {
+		String str = null;
+		if ("R".equalsIgnoreCase(name)) {
+			str = "Ravi";
+		} else if ("B".equalsIgnoreCase(name)) {
+			str = "Bat";
+		} else {
+			str = "All";
+		}
+		return str;
+	}
+	
+
 	/*public static void main(String args[]) {
-		String expression = "^[a-zA-Z0-9]*$";
-		Object value = "jfkdjfjdklfjlfkjdlf7987897";
-		boolean result = regExpCheck(value, expression);
-		System.out.println("result : "+result);
+		checkStr(null, "B","R");
+		
+		
 	}*/
+
 }
